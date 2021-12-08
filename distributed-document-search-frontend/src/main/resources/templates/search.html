@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <style>
+    table, th, td {
+      border: 1px solid black;
+    }
+    </style>
+</head>
+
+<a href="/">Go back</a>
+
+<body>
+<h3 th:text="'Finished running query: ' + ${query}" />
+<table>
+    <tr>
+        <td>Rank</td>
+        <td>Score</td>
+        <td>Title</td>
+    </tr>
+    <tr th:each="result, iStat: ${results}">
+        <td th:text="${iStat.index} + 1" />
+        <td th:text="${result.getScore()}" />
+        <td th:text="${result.getDocumentTitle()}" />
+    </tr>
+</table>
+
+</body>
+</html>

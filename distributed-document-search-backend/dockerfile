@@ -1,0 +1,7 @@
+FROM openjdk:8-jdk-alpine
+ARG JAR_FILE=target/document-search-backend-server-jar-with-dependencies.jar
+ARG RESOURCE_FOLDER=resources
+COPY ${JAR_FILE} app.jar
+COPY ${RESOURCE_FOLDER} ${RESOURCE_FOLDER}
+ENTRYPOINT ["java","-jar","/app.jar"]
+CMD ["50050"]

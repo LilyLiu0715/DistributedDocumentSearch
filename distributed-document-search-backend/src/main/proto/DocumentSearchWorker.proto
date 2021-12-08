@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.ds.documentsearch";
+option java_outer_classname = "WorkerServiceProto";
+option objc_class_prefix = "HLW";
+
+package worker_service;
+
+// Worker service definition. A worker service completes assignments
+// dispatched by the coordinator and returns the partial results to
+// the coordinator.
+service DocumentSearchWorkerService {
+  rpc DispatchWork (WorkerRequest) returns (WorkerResponse) {}
+}
+
+message WorkerRequest {
+  // All the terms extracted from the query. This field
+  // should be the same across all the worker requests
+  // for one search request.
+  repeated string terms = 1;
+
+  // The documents this worker is assigned with. Different
+  // workers will be assigned with different documents.
+  repeated string document_titles = 2;
+}
+
+message DocumentTermFrequencies {
+  string document_title = 1;
+
+  message TermFrequency {
+    string term = 1;
+
+    // The frequency of this term in this document, normalized
+    // by the total number of terms in this document.
+    double term_frequency = 2;
+  }
+
+  // The frequencies of all the terms specified in the worker
+  // request.
+  repeated TermFrequency term_frequencies = 2;
+}
+
+message WorkerResponse {
+  // The term frequencies for all the documents specified in the
+  // worker request.
+  repeated DocumentTermFrequencies document_term_frequencies = 1;
+}

@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.ds.documentsearch";
+option java_outer_classname = "CoordinatorServiceProto";
+option objc_class_prefix = "HLW";
+
+package coordinator_service;
+
+// Coordinator service definition. A coordinator service receives
+// search requests from frontend servers, dispatches the work to
+// workers and returns aggregated results back to frontend servers.
+service DocumentSearchCoordinatorService {
+  rpc SearchDocument (SearchRequest) returns (SearchResponse) {}
+}
+
+message SearchRequest {
+  string query = 1;
+
+  // Indicates only the top k results are requested.
+  int32 top_k = 2;
+}
+
+message ResponseStatus {
+  enum ResponseCode {
+    UNKNOWN = 0;
+    INVALID_REQUEST = 1;
+    INTERNAL_FAILURE = 2;
+    SUCCESS = 3;
+  }
+  ResponseCode response_code = 1;
+
+  // Additional error message for explaining the error.
+  // Only populated when response_code != SUCCESS.
+  string err_msg = 2;
+}
+
+message SearchResponse {
+  ResponseStatus status = 1;
+
+  message SearchResult {
+    string document_title = 1;
+
+    double score = 2;
+  }
+  // Sorted by relevance score.
+  repeated SearchResult results = 2;
+}
